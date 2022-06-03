@@ -1,0 +1,4 @@
+project: PROJECT
+target: mruby_fuzzer
+cmds:
+- cmd: /out/mruby_fuzzer
