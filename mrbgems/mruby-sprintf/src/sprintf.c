@@ -9,13 +9,14 @@
 #include <mruby/hash.h>
 #include <mruby/numeric.h>
 #include <mruby/presym.h>
-#include <mruby/internal.h>
 #include <string.h>
 #include <ctype.h>
 
 #define BIT_DIGITS(N)   (((N)*146)/485 + 1)  /* log2(10) =~ 146/485 */
 #define BITSPERDIG MRB_INT_BIT
 #define EXTENDSIGN(n, l) (((~0U << (n)) >> (((n)*(l)) % BITSPERDIG)) & ~(~0U << (n)))
+
+mrb_value mrb_bint_to_s(mrb_state *mrb, mrb_value x, mrb_int base);
 
 static char*
 remove_sign_bits(char *str, int base)
@@ -44,13 +45,13 @@ remove_sign_bits(char *str, int base)
 }
 
 static char
-sign_bits(int base, const char *p)
+sign_bits(int base, const char prefix)
 {
   char c;
 
   switch (base) {
   case 16:
-    if (*p == 'X') c = 'F';
+    if (prefix == 'X') c = 'F';
     else c = 'f';
     break;
   case 8:
@@ -63,7 +64,7 @@ sign_bits(int base, const char *p)
   return c;
 }
 
-static char *
+static char*
 mrb_uint_to_cstr(char *buf, size_t len, mrb_int num, int base)
 {
   char *b = buf + len - 1;
@@ -89,7 +90,7 @@ mrb_uint_to_cstr(char *buf, size_t len, mrb_int num, int base)
 
   if (num < 0) {
     b = remove_sign_bits(b, base);
-    if (d && *b != d) {
+    if (*b != d) {
       *--b = d;
     }
   }
@@ -617,9 +618,17 @@ retry:
 #ifdef MRB_USE_BIGINT
           case MRB_TT_BIGINT:
             {
+              mrb_int n = (mrb_bint_cmp(mrb, val, mrb_fixnum_value(0)));
+              if ((base == 16 || base == 8 || base == 2) && n < 0) { /* negative */
+              }
               mrb_value str = mrb_bint_to_s(mrb, val, base);
               s = RSTRING_PTR(str);
               len = RSTRING_LEN(str);
+              if (&& s[0] == '-') {
+                s++; len--;
+                s = remove_sign_bits(s, base);
+                dots = 1;
+              }
             }
             goto str_skip;
 #endif
@@ -737,7 +746,7 @@ retry:
             FILL(c, prec - len);
           }
           else if (v < 0) {
-            char c = sign_bits(base, p);
+            char c = sign_bits(base, *p);
             FILL(c, prec - len);
           }
         }
