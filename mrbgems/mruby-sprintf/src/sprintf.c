@@ -624,7 +624,7 @@ retry:
               mrb_value str = mrb_bint_to_s(mrb, val, base);
               s = RSTRING_PTR(str);
               len = RSTRING_LEN(str);
-              if (&& s[0] == '-') {
+              if (s[0] == '-') {
                 s++; len--;
                 s = remove_sign_bits(s, base);
                 dots = 1;
