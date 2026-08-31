@@ -1,0 +1,13 @@
+project: savantenvs/mruby
+target: mruby_fuzzer
+# Seed corpus, canonical two-entry form (docs/seed-corpus.md): the server tar is REQUIRED or the
+# corpus never accumulates, and the local path must be RELATIVE and per-target.
+testsuite:
+  - https://$MAYHEM_DOMAIN/$MAYHEM_PROJECT/$MAYHEM_TARGET/testsuite.tar
+  - file://mayhem/mruby_fuzzer/testsuite
+cmds:
+  # The classic OSS-Fuzz harness: mrb_load_string() over the raw input (parser + codegen + VM).
+  # Upstream ships a Ruby keyword/operator dictionary next to the harness — reuse it (read-only).
+  - cmd: /mayhem/mruby_fuzzer
+    libfuzzer: true
+    dictionary: /mayhem/oss-fuzz/config/mruby.dict

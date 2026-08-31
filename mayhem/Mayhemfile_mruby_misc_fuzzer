@@ -1,0 +1,9 @@
+project: savantenvs/mruby
+target: mruby_misc_fuzzer
+testsuite:
+  - https://$MAYHEM_DOMAIN/$MAYHEM_PROJECT/$MAYHEM_TARGET/testsuite.tar
+  - file://mayhem/mruby_misc_fuzzer/testsuite
+cmds:
+  # Set / Time / Random / Range built from the input bytes (first byte selects the sub-target).
+  - cmd: /mayhem/mruby_misc_fuzzer
+    libfuzzer: true

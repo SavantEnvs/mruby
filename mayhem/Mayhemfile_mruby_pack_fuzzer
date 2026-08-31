@@ -1,0 +1,9 @@
+project: savantenvs/mruby
+target: mruby_pack_fuzzer
+testsuite:
+  - https://$MAYHEM_DOMAIN/$MAYHEM_PROJECT/$MAYHEM_TARGET/testsuite.tar
+  - file://mayhem/mruby_pack_fuzzer/testsuite
+cmds:
+  # String#unpack / Array#pack with an input-derived template string (mruby-pack).
+  - cmd: /mayhem/mruby_pack_fuzzer
+    libfuzzer: true

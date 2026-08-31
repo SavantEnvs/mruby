@@ -1,0 +1,9 @@
+project: savantenvs/mruby
+target: mruby_sprintf_fuzzer
+testsuite:
+  - https://$MAYHEM_DOMAIN/$MAYHEM_PROJECT/$MAYHEM_TARGET/testsuite.tar
+  - file://mayhem/mruby_sprintf_fuzzer/testsuite
+cmds:
+  # Kernel#sprintf with an input-derived format string and a fixed mixed-type argument list.
+  - cmd: /mayhem/mruby_sprintf_fuzzer
+    libfuzzer: true

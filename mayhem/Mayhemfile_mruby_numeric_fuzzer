@@ -1,0 +1,9 @@
+project: savantenvs/mruby
+target: mruby_numeric_fuzzer
+testsuite:
+  - https://$MAYHEM_DOMAIN/$MAYHEM_PROJECT/$MAYHEM_TARGET/testsuite.tar
+  - file://mayhem/mruby_numeric_fuzzer/testsuite
+cmds:
+  # Integer/BigInt arithmetic, Rational, Complex and Math over input-derived operands.
+  - cmd: /mayhem/mruby_numeric_fuzzer
+    libfuzzer: true

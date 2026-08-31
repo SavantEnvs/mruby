@@ -1,0 +1,10 @@
+project: savantenvs/mruby
+target: mruby_irep_fuzzer
+testsuite:
+  - https://$MAYHEM_DOMAIN/$MAYHEM_PROJECT/$MAYHEM_TARGET/testsuite.tar
+  - file://mayhem/mruby_irep_fuzzer/testsuite
+cmds:
+  # mrb_load_irep_buf() over a compiled .mrb bytecode image — the deserializer, not the parser.
+  # Seeds are real mrbc output for the Ruby snippets in mayhem/mruby_fuzzer/testsuite.
+  - cmd: /mayhem/mruby_irep_fuzzer
+    libfuzzer: true

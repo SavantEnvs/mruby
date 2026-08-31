@@ -1,0 +1,10 @@
+project: savantenvs/mruby
+target: mruby_regexp_fuzzer
+testsuite:
+  - https://$MAYHEM_DOMAIN/$MAYHEM_PROJECT/$MAYHEM_TARGET/testsuite.tar
+  - file://mayhem/mruby_regexp_fuzzer/testsuite
+cmds:
+  # Regexp.new(pattern, flags) + Regexp#match over an input-derived pattern/subject pair
+  # (mruby-regexp, mruby's in-tree regexp engine).
+  - cmd: /mayhem/mruby_regexp_fuzzer
+    libfuzzer: true
